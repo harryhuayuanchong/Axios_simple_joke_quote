@@ -1,17 +1,35 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Joke Quote</h1>
+    <button @click="showJoke">Show Joke</button>
+    <div v-if="joke">
+      <p>{{ joke }}</p>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  props: {
+    msg: String,
+  },
+  data() {
+    return {
+      joke: '',
+    }
+  },
+  methods: {
+    async showJoke() {
+      let config = {
+        headers: {
+          'Accept': 'application/json'
+        }
+      }
+      const joke = await this.$http.get('https://icanhazdadjoke.com', config);
+      this.joke = joke.data.joke
+    }
   }
 }
 </script>
